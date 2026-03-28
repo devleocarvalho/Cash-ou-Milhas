@@ -305,7 +305,7 @@ function init() {
     months.forEach((m, i) => {
         monthsDiv.innerHTML += `<input type="number" id="m${i}" value="" placeholder="Gasto em ${m}" style="margin-bottom:5px;">`;
     });
-    syncRules(); // Auto-sync ao iniciar
+    syncRules();
 }
 
 function updBand() {
@@ -319,6 +319,36 @@ function updVar() {
     const b = document.getElementById('bank').value, bn = document.getElementById('band').value;
     const varS = document.getElementById('variante'); varS.innerHTML = "";
     if(db[b] && db[b][bn]) db[b][bn].forEach((v, i) => varS.add(new Option(v.n, i)));
+}
+
+function getCashbackValue(card, spend) {
+    if (!card.c) return 0;
+
+    if (typeof card.c === 'object') {
+        return spend * (card.c.value || 0);
+    } else if (typeof card.c === 'number') {
+        return spend * card.c;
+    }
+    return 0;
+}
+
+function getPointsRate(card, spend, intlRatio) {
+    if (!card.p) return 0;
+
+    const basePts = (typeof card.p === 'object' && card.p.base) ? card.p.base : (typeof card.p !== 'object' ? card.p : 0);
+    const intlPts = (typeof card.p === 'object' && card.p.international) ? card.p.international : basePts;
+    let applicableRate = (basePts * (1 - intlRatio)) + (intlPts * intlRatio);
+
+    if (card.p && card.p.tiers) {
+        const sortedTiers = card.p.tiers.sort((a, b) => (b.spend_gt || 0) - (a.spend_gt || 0));
+        for (const tier of sortedTiers) {
+            if (tier.spend_gt !== undefined && spend >= tier.spend_gt) {
+                applicableRate = tier.points;
+                break;
+            }
+        }
+    }
+    return applicableRate;
 }
 
 function calc() {
@@ -353,33 +383,13 @@ function calc() {
                 (type === 'year' ? (parseFloat(document.getElementById('spendValue').value)||0)/12 : 
                 (parseFloat(document.getElementById('m'+i).value)||0));
 
-        let mC = (card.c || 0) * s;
+        let mC = getCashbackValue(card, s);
         let pts = 0;
 
         if (card.p) {
             const p_unit = card.p_unit || 'dollar';
-            let points_rate = 0;
-
-            if (typeof card.p === 'object') {
-                const basePts = card.p.base || 0;
-                const intlPts = card.p.international || basePts;
-                points_rate = (basePts * (1 - intlRatio)) + (intlPts * intlRatio);
-            } else {
-                points_rate = card.p;
-            }
-            if (b === "Porto Bank" && card.n === "Infinite") {
-                if (s >= 20000) {
-                    points_rate = 3.5;
-                } else if (s >= 10000) {
-                    points_rate = 3.0;
-                }
-            }
-            if (b === "Banco do Brasil" && card.n === "Altus Infinite") {
-                if (s >= 25000) {
-                    points_rate = 4.0;
-                }
-            }
-
+            const points_rate = getPointsRate(card, s, intlRatio);
+            
             if (p_unit === 'dollar') {
                 pts = (s / cfg.usd) * points_rate;
             } else if (p_unit === 'real') {
@@ -462,6 +472,7 @@ function radar(currentBenefit, currentCard, intlRatio) {
     let bestCardOwner = null;
     let maxBenefit = currentBenefit;
     const cdiF = parseFloat(document.getElementById('cdi').value);
+    const bonus = 1 + parseFloat(document.getElementById('bonus').value);
     const mCDI = Math.pow(1 + (cfg.cdi * cdiF), 1/12) - 1;
 
     const spendType = document.getElementById('spendType').value;
@@ -482,34 +493,13 @@ function radar(currentBenefit, currentCard, intlRatio) {
             cartoes.forEach(card => {
                 if (card.n === currentCard.n) return;
 
-                let points_rate = 0;
-                if (typeof card.p === 'object') {
-                    const basePts = card.p.base || 0;
-                    const intlPts = card.p.international || basePts;
-                    points_rate = (basePts * (1 - intlRatio)) + (intlPts * intlRatio);
-                } else {
-                    points_rate = card.p || 0;
-                }
-
-                if (bankName === "Porto Bank" && card.n === "Infinite") {
-                    if (monthlySpendAvg >= 20000) {
-                        points_rate = 3.5;
-                    } else if (monthlySpendAvg >= 10000) {
-                        points_rate = 3.0;
-                    }
-                }
-                if (bankName === "Banco do Brasil" && card.n === "Altus Infinite") {
-                    if (monthlySpendAvg >= 25000) {
-                        points_rate = 4.0;
-                    }
-                }
-
+                const points_rate = getPointsRate(card, monthlySpendAvg, intlRatio);
                 const p_unit = card.p_unit || 'dollar';
                 const otherAnuidade = card.anuidade || 0;
                 const pts = p_unit === 'real' ? totalAnnualSpend * points_rate : (totalAnnualSpend / cfg.usd) * points_rate;
-                const benefitMilhas = (pts / 1000) * cfg.mil;
+                const benefitMilhas = (pts * bonus / 1000) * cfg.mil;
                 
-                const monthlyCashback = monthlySpendAvg * (card.c || 0);
+                const monthlyCashback = getCashbackValue(card, monthlySpendAvg);
                 let radar_aCB = 0;
                 let radar_aCDI = 0;
                 for (let i=0; i<12; i++) {
@@ -621,18 +611,12 @@ function exportPDF() {
                     (spendType === 'year' ? (parseFloat(spendValue)||0)/12 : 
                     (parseFloat(document.getElementById('m'+i).value)||0));
 
-            let mC = (card.c || 0) * s;
+            let mC = getCashbackValue(card, s);
             let pts = 0;
             if (card.p) {
                 const p_unit = card.p_unit || 'dollar';
-                let points_rate = 0;
-                if (typeof card.p === 'object') {
-                    points_rate = (card.p.base || 0) * (1 - (parseFloat(intlPercent) / 100)) + (card.p.international || card.p.base || 0) * (parseFloat(intlPercent) / 100);
-                } else {
-                    points_rate = card.p;
-                }
-                if (bank === "Porto Bank" && card.n === "Infinite") { if (s >= 20000) points_rate = 3.5; else if (s >= 10000) points_rate = 3.0; }
-                if (bank === "Banco do Brasil" && card.n === "Altus Infinite") { if (s >= 25000) points_rate = 4.0; }
+                const intlRatioPDF = (parseFloat(intlPercent) / 100);
+                const points_rate = getPointsRate(card, s, intlRatioPDF);
                 if (p_unit === 'dollar') pts = (s / cfg.usd) * points_rate; else if (p_unit === 'real') pts = s * points_rate;
             }
             let valMilhasMensal = (pts * (1 + parseFloat(document.getElementById('bonus').value)) / 1000) * cfg.mil;
@@ -725,7 +709,7 @@ const opt = {
         useCORS: true,
         letterRendering: true 
     },
-    jsPDF: { unit: 'mm', format: [210, 420], orientation: 'portrait' }
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
 };
 
 html2pdf().from(exportContainer).set(opt).save();

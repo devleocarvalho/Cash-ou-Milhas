@@ -15,7 +15,7 @@
         {"n": "Altus Infinite", "anuidade": 1500, "c": 0, "p": {
           "base": 2.5,
           "tiers": [
-            {"points": 4.0, "condition_text": "Clientes do segmento Private ou com gastos mensais acima de R$25k"}
+            {"spend_gt": 25000, "points": 4.0, "condition_text": "Clientes do segmento Private ou com gastos mensais acima de R$25k"}
           ]
         }, "p_unit": "dollar", "points_program": "Livelo", "obs": "Pontuação base de 2.5 pts/$. Atinge 4.0 pts/$ para clientes Private ou com gastos >R$25k/mês. Máximo luxo do BB."}
       ],
@@ -85,7 +85,7 @@
     "Nubank": {
       "Mastercard": [
         {"n": "Gold/Platinum", "anuidade": 0, "c": null, "p": null, "obs": "Sem acúmulo de pontos ou cashback padrão."},
-        {"n": "Ultravioleta", "anuidade": 1068, "reward_type": "choice", "c": {"type": "cdi_linked", "multiplier": 2.0, "description": "Cashback imediato de 1% que rende 200% do CDI"}, "p": {"base": 2.2}, "p_unit": "dollar", "points_program": "Nubank", "obs": "Escolha entre pontos que não expiram ou cashback. Isento com R$ 5k/mês ou R$ 50k investidos."}
+        {"n": "Ultravioleta", "anuidade": 1068, "reward_type": "choice", "c": {"type": "cdi_linked", "value": 0.01, "multiplier": 2.0, "description": "Cashback imediato de 1% que rende 200% do CDI"}, "p": {"base": 2.2}, "p_unit": "dollar", "points_program": "Nubank", "obs": "Escolha entre pontos que não expiram ou cashback. Isento com R$ 5k/mês ou R$ 50k investidos."}
       ]
     },
     "C6 Bank": {
