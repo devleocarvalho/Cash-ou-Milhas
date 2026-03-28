@@ -1,17 +1,17 @@
 {
   "config": {
     "schema_version": "2.0",
-    "usd_ptax": 5.54,
-    "valor_milheiro": 25.00,
+    "usd_ptax": 5.2376,
+    "valor_milheiro": 21.00,
     "cdi_anual": 0.1451,
-    "atualizado_em": "2026-03-21"
+    "atualizado_em": "2026-03-27"
   },
   "bancos": {
     "Banco do Brasil": {
       "Visa": [
-        {"n": "Gold", "anuidade": 420, "c": null, "p": {"base": 1.0}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 4k/mês ou investimentos."},
-        {"n": "Platinum", "anuidade": 636, "c": null, "p": {"base": 1.5}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 7k/mês ou R$ 150k investidos."},
-        {"n": "Infinite", "anuidade": 1260, "c": null, "p": {"base": 2.0}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com gastos acima de R$ 15k/mês ou R$ 250k investidos."},
+        {"n": "Gold", "anuidade": 420, "reward_type": "points", "c": null, "p": {"base": 1.0}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 4k/mês ou investimentos."},
+        {"n": "Platinum", "anuidade": 636, "reward_type": "points", "c": null, "p": {"base": 1.5}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 7k/mês ou R$ 150k investidos."},
+        {"n": "Infinite", "anuidade": 1260, "reward_type": "points", "c": null, "p": {"base": 2.0}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com gastos acima de R$ 15k/mês ou R$ 250k investidos."},
         {"n": "Altus Infinite", "anuidade": 1500, "c": 0, "p": {
           "base": 2.5,
           "tiers": [
@@ -20,11 +20,11 @@
         }, "p_unit": "dollar", "points_program": "Livelo", "obs": "Pontuação base de 2.5 pts/$. Atinge 4.0 pts/$ para clientes Private ou com gastos >R$25k/mês. Máximo luxo do BB."}
       ],
       "Mastercard": [
-        {"n": "Black", "anuidade": 1320, "c": null, "p": {"base": 2.0}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 15k/mês. 80% de desconto na anuidade para quem já tem Visa Infinite ativo."}
+        {"n": "Black", "anuidade": 1320, "reward_type": "points", "c": null, "p": {"base": 2.0}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 15k/mês. 80% de desconto na anuidade para quem já tem Visa Infinite ativo."}
       ],
       "Elo": [
-        {"n": "Grafite", "anuidade": 612, "c": null, "p": {"base": 1.7}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 8k/mês."},
-        {"n": "Nanquim", "anuidade": 1320, "c": null, "p": {"base": 2.2}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 15k/mês. Promoção 90% desconto p/ quem tem Visa Infinite."}
+        {"n": "Grafite", "anuidade": 612, "reward_type": "points", "c": null, "p": {"base": 1.7}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 8k/mês."},
+        {"n": "Nanquim", "anuidade": 1320, "reward_type": "points", "c": null, "p": {"base": 2.2}, "p_unit": "dollar", "points_program": "Livelo", "obs": "Isenção com R$ 15k/mês. Promoção 90% desconto p/ quem tem Visa Infinite."}
       ]
     },
     "Bradesco": {
@@ -42,6 +42,18 @@
         {"n": "Grafite", "anuidade": 690, "c": 0, "p": 1.4, "p_unit": "dollar", "points_program": "Livelo", "obs": "1.4 pts/$."},
         {"n": "Nanquim", "anuidade": 1350, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.2 pts/$."},
         {"n": "Diners Club", "anuidade": 1500, "c": 0, "p": {"base": 2.2, "international": 3.3}, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.2 nacional / 3.3 inter. Transfer (Limo) p/ aeroporto incluso."}
+      ]
+    },
+    "BRB": {
+      "Visa": [
+        {"n": "Gold", "anuidade": 312, "reward_type": "points", "c": null, "p": {"base": 1.0}, "p_unit": "dollar", "points_program": "Curtaí", "obs": "1.0 pt/$."},
+        {"n": "Platinum", "anuidade": 492, "reward_type": "points", "c": null, "p": {"base": 1.5}, "p_unit": "dollar", "points_program": "Curtaí", "obs": "1.5 pts/$."},
+        {"n": "Infinite", "anuidade": 1140, "reward_type": "points", "c": null, "p": {"base": 2.0}, "p_unit": "dollar", "points_program": "Curtaí", "obs": "2.0 pts/$."},
+        {"n": "Dux", "anuidade": 1650, "reward_type": "points", "c": null, "p": {"base": 5.0, "international": 7.0}, "p_unit": "dollar", "points_program": "Curtaí", "obs": "5.0 pts/$ nacional e 7.0 pts/$ internacional. Acesso ilimitado a salas VIP (LoungeKey, Priority Pass e Dragon Pass)."},
+        {"n": "Dux Eurobike", "anuidade": 1650, "reward_type": "points", "c": null, "p": {"base": 5.0, "international": 7.0}, "p_unit": "dollar", "points_program": "Curtaí", "obs": "Mesmos benefícios do Dux, com vantagens adicionais na rede Eurobike."}
+      ],
+      "Mastercard": [
+        {"n": "Black", "anuidade": 960, "reward_type": "points", "c": null, "p": {"base": 2.0}, "p_unit": "dollar", "points_program": "Curtaí", "obs": "2.0 pts/$."}
       ]
     },
     "Itaú": {
@@ -84,7 +96,7 @@
     },
     "Nubank": {
       "Mastercard": [
-        {"n": "Gold/Platinum", "anuidade": 0, "c": null, "p": null, "obs": "Sem acúmulo de pontos ou cashback padrão."},
+        {"n": "Gold/Platinum", "anuidade": 0, "reward_type": "none", "c": null, "p": null, "obs": "Sem acúmulo de pontos ou cashback padrão."},
         {"n": "Ultravioleta", "anuidade": 1068, "reward_type": "choice", "c": {"type": "cdi_linked", "value": 0.01, "multiplier": 2.0, "description": "Cashback imediato de 1% que rende 200% do CDI"}, "p": {"base": 2.2}, "p_unit": "dollar", "points_program": "Nubank", "obs": "Escolha entre pontos que não expiram ou cashback. Isento com R$ 5k/mês ou R$ 50k investidos."}
       ]
     },
@@ -97,10 +109,10 @@
     },
     "Inter": {
       "Mastercard": [
-        {"n": "Gold", "anuidade": 0, "c": {"type": "fixed", "value": 0.0025}, "p": null, "obs": "0.25% Cashback na fatura."},
-        {"n": "Platinum", "anuidade": 0, "c": {"type": "fixed", "value": 0.005}, "p": null, "obs": "0.5% Cashback na fatura."},
-        {"n": "Black", "anuidade": 0, "c": {"type": "fixed", "value": 0.01}, "p": null, "obs": "1% Cashback na fatura. Isenção via Duo Gourmet ou gastos de R$ 7k/mês."},
-        {"n": "Win", "anuidade": 0, "c": {"type": "fixed", "value": 0.0125}, "p": null, "obs": "1.25% Cashback na fatura. Exclusivo para investimentos > R$ 1M."}
+        {"n": "Gold", "anuidade": 0, "reward_type": "cashback", "c": {"type": "fixed", "value": 0.0025}, "p": null, "obs": "0.25% Cashback na fatura."},
+        {"n": "Platinum", "anuidade": 0, "reward_type": "cashback", "c": {"type": "fixed", "value": 0.005}, "p": null, "obs": "0.5% Cashback na fatura."},
+        {"n": "Black", "anuidade": 0, "reward_type": "cashback", "c": {"type": "fixed", "value": 0.01}, "p": null, "obs": "1% Cashback na fatura. Isenção via Duo Gourmet ou gastos de R$ 7k/mês."},
+        {"n": "Win", "anuidade": 0, "reward_type": "cashback", "c": {"type": "fixed", "value": 0.0125}, "p": null, "obs": "1.25% Cashback na fatura. Exclusivo para investimentos > R$ 1M."}
       ]
     },
     "XP Investimentos": {
@@ -121,9 +133,26 @@
         {"n": "Infinite", "anuidade": 1560, "c": 0, "p": {
           "base": 2.2,
           "tiers": [
-            {"spend_gt": 20000, "points": 3.5}
+            {"spend_gt": 20000, "points": 3.5, "condition_text": "Gastos acima de R$20k"}
           ]
         }, "p_unit": "dollar", "points_program": "Porto Plus", "obs": "Pontuação base de 2.2 pts/$. Atinge 3.5 pts/$ com gastos acima de R$20k. Isento com R$ 20k/mês."}
+      ]
+    },
+    "Sicoob": {
+      "Mastercard": [
+        {"n": "Black Merit", "anuidade": 770, "reward_type": "points", "c": null, "p": {"base": 2.2}, "p_unit": "dollar", "points_program": "Coopera", "obs": "2.2 pts/$. Pontos não expiram. Acesso ilimitado à sala VIP Mastercard Black em GRU."},
+        {"n": "Black", "anuidade": 770, "reward_type": "points", "c": null, "p": {"base": 2.2}, "p_unit": "dollar", "points_program": "Coopera", "obs": "2.2 pts/$."}
+      ],
+      "Visa": [
+        {"n": "Platinum", "anuidade": 384, "reward_type": "points", "c": null, "p": {"base": 1.5}, "p_unit": "dollar", "points_program": "Coopera", "obs": "1.5 pts/$."}
+      ]
+    },
+    "Sicredi": {
+      "Mastercard": [
+        {"n": "Black", "anuidade": 750, "reward_type": "points", "c": null, "p": {"base": 2.0}, "p_unit": "dollar", "points_program": "Sicredi", "obs": "2.0 pts/$. Isenção progressiva por gastos."}
+      ],
+      "Visa": [
+        {"n": "Infinite", "anuidade": 750, "reward_type": "points", "c": null, "p": {"base": 2.0}, "p_unit": "dollar", "points_program": "Sicredi", "obs": "2.0 pts/$. Isenção progressiva por gastos."}
       ]
     },
     "Unicred": {
