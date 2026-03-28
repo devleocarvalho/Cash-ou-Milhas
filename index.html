@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Cash ou Milhas</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050810; --card-bg: rgba(16, 20, 35, 0.85); --primary: #00F5A0; 
+            --secondary: #00D9FF; --accent: #FFD700; --text: #E2E8F0; --muted: #64748B;
+            --border: rgba(255, 255, 255, 0.1); --glow: rgba(0, 245, 160, 0.25);
+            --input-bg: #028d5cbc; 
+        }
+
+        [data-theme="light"] {
+            --bg: #F1F5F9; --card-bg: rgba(255, 255, 255, 0.95); --primary: #059669;
+            --secondary: #0284C7; --accent: #D97706; --text: #1E293B; --muted: #64748B;
+            --border: rgba(0, 0, 0, 0.1); --glow: rgba(5, 150, 105, 0.2);
+            --input-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 15px;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 15% 25%, var(--glow), transparent 40%), radial-gradient(circle at 85% 75%, var(--secondary), transparent 40%);
+            opacity: 0.2;
+            z-index: -1;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        .layout {
+            display: grid; grid-template-columns: 350px 1fr 300px; gap: 20px;
+            max-width: 1800px; margin: auto;
+        }
+
+        @media (max-width: 1200px) { .layout { grid-template-columns: 320px 1fr; } .ad-column { display: none; } }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } aside { order: 1; } main { order: 2; } }
+
+        @keyframes float {
+            to { transform: translate(5vw, -10vh); }
+        }
+
+        .glass {
+            background: var(--card-bg); backdrop-filter: blur(25px); border: 1px solid var(--border);
+            border-radius: 24px; padding: 22px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+
+        .theme-toggle {
+            position: fixed; top: 15px; right: 15px; width: 45px; height: 45px;
+            border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border);
+            cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .glass:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2), 0 0 30px var(--glow);
+        }
+
+        h3 { font-weight: 800; letter-spacing: -1px; margin-top: 0; color: var(--text); }
+        label { font-size: 10px; color: var(--secondary); text-transform: uppercase; font-weight: 800; letter-spacing: 1.2px; display: block; margin-top: 15px; }
+
+        select, input {
+            width: 100%; background: var(--input-bg); border: 1px solid var(--border);
+            color: var(--text); padding: 5px; border-radius: 12px; margin-top: 5px; font-weight: 600;
+            outline: none; transition: all 0.3s ease;
+        }
+        select:focus, input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--glow); }
+
+        .btn {
+            width: 100%; padding: 14px; border-radius: 14px; border: none;
+            font-weight: 800; text-transform: uppercase; cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-main { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #000; margin-top: 15px; }
+        .btn-main:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 25px var(--glow);
+        }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin: 20px 0; }
+        .stat-card {
+            padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border); text-align: center; transition: all 0.4s ease;
+        }
+        .stat-card b { display: block; font-size: 22px; margin-top: 8px; }
+
+        .winner-glow {
+            border: 2px solid var(--primary) !important;
+            box-shadow: 0 0 35px var(--glow), 0 0 15px var(--primary) !important;
+            transform: scale(1.05);
+        }
+
+        .ad-column { display: flex; flex-direction: column; gap: 20px; }
+        .radar-box {
+            background: linear-gradient(135deg, var(--accent), #b45309); color: #000;
+            border-radius: 22px; padding: 20px; display: none;
+            animation: pulse-accent 2s infinite ease-in-out;
+        }
+        @keyframes pulse-accent {
+            0% { box-shadow: 0 5px 15px rgba(217,119,6,0.2); transform: scale(1); }
+            50% { box-shadow: 0 10px 25px rgba(217,119,6,0.4); transform: scale(1.03); }
+            100% { box-shadow: 0 5px 15px rgba(217,119,6,0.2); transform: scale(1); }
+        }
+
+        .promo-card { background: #112240; border: 1px solid var(--border); border-radius: 22px; padding: 15px; text-align: center; }
+    </style>
+    <style>
+        .checkbox-container { display: flex; align-items: center; margin-top: 15px; }
+        .checkbox-container input { width: auto; margin-top: 0; margin-right: 10px; }
+        .checkbox-container label { margin-top: 0; font-size: 12px; color: var(--text); cursor: pointer; }
+    </style>
+</head>
+<body data-theme="dark">
+
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+
+<div class="layout">
+    <aside>
+        <div class="glass">
+            <img src="logo.png" alt="Cash ou Milhas Logo" style="width: 100px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
+            <button class="btn" style="background:transparent; border:1px solid var(--secondary); color:var(--secondary); font-size:10px;" onclick="syncRules()">
+                🔄 SINCRONIZAR REGRAS AO VIVO
+            </button>
+
+            <label>Instituição</label>
+            <select id="bank" onchange="updBand()"></select>
+            
+            <label>Bandeira</label>
+            <select id="band" onchange="updVar()"></select>
+            
+            <label>Variante do Cartão</label>
+            <select id="variante"></select>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="anuidadeIsenta">
+                <label for="anuidadeIsenta">Tenho isenção de anuidade</label>
+            </div>
+            
+            <label>Método de Gastos</label>
+            <select id="spendType" onchange="toggleSpendInput()">
+                <option value="month">Gasto Fixo Mensal</option>
+                <option value="year">Gasto Total Anual</option>
+                <option value="custom">Gasto Detalhado por Mês</option>
+            </select>
+
+            <div id="singleSpendDiv">
+                <label id="spendLabel">Valor (R$)</label>
+                <input type="number" id="spendValue" value="0" placeholder="R$ 1000">
+            </div>
+
+            <div id="customSpendDiv" style="display:none; max-height: 200px; overflow-y: auto;">
+                <label>Gastos de Janeiro a Dezembro</label>
+                <div id="monthsInputs"></div>
+            </div>
+
+            <label>Gastos Internacionais (<span id="intlPercentLabel">0%</span>)</label>
+            <input type="range" id="intlPercent" min="0" max="100" value="0" step="5" oninput="document.getElementById('intlPercentLabel').innerText = this.value + '%'">
+
+            <label>Bônus de Transferência</label>
+            <select id="bonus">
+                <option value="0">0%</option>
+                <option value="0.8">80%</option>
+                <option value="1.0" selected>100%</option>
+            </select>
+            
+            <label>Rendimento CDI</label>
+            <select id="cdi">
+                <option value="0.8">80% CDI</option>
+                <option value="1.0" selected>100% CDI</option>
+                <option value="1.05">105% CDI</option>
+            </select>
+            
+            <button class="btn btn-main" onclick="calc()">Calcular Benefícios</button>
+            <button class="btn" style="background:transparent; border:1px solid var(--accent); color:var(--accent); font-size:10px; margin-top: 10px;" onclick="exportPDF()">
+                Exportar Análise em PDF
+            </button>
+        </div>
+    </aside>
+
+    <main id="capture">
+        <div class="glass" style="margin-bottom: 20px;">
+            <div class="glass" style="margin-top: 20px;">
+                <h3> Análise Estratégia Mensal</h3>
+                <p style="font-size: 11px; color: var(--muted); margin-bottom: 15px;">
+                    Sugestão baseada na rentabilidade real de cada mês (Gasto vs. Cotação)
+                </p>
+                <div id="monthlyStrategyGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px;"> </div>
+            </div>
+            <h3 id="dashTitle">Análise Estratégica Anual</h3>
+            <div class="stats-grid">
+                <div class="stat-card" id="cardCash">
+                    <small>Dinheiro (Cash + CDI)</small>
+                    <b id="vTotal">R$ 0,00</b>
+                </div>
+                <div class="stat-card" id="cardPoints">
+                    <small>Pontos / Milhas</small>
+                    <b id="vMil">R$ 0,00</b>
+                    <small id="vPts" style="font-size: 12px; color: var(--muted); display: block; margin-top: 4px;"></small>
+                </div>
+                <div class="stat-card" id="cardAnuidade">
+                    <small>Custo (Anuidade)</small>
+                    <b id="vAnuidade" style="color: #ef4444;">- R$ 0,00</b>
+                </div>
+            </div>
+            <div id="veredito" style="text-align:center; font-weight:800; font-size:18px; margin-top:10px; color: var(--primary);"></div>
+        </div>
+
+        <div class="glass">
+            <h3>Evolução Patrimonial Detalhada</h3>
+            <canvas id="chart" height="150"></canvas>
+        </div>
+    </main>
+
+    <aside class="ad-column">
+        <div id="radar" class="radar-box">
+            <h4 style="margin:0; font-size:14px;">🚀 UPGRADE ENCONTRADO!</h4>
+            <p id="radarTxt" style="font-size:12px; margin:10px 0; font-weight:600;"></p>
+            <button class="btn" style="background:#ff8902; color:#fff; font-size:10px; padding:8px;">SOLICITAR AGORA</button>
+        </div>
+
+        <div class="promo-card">
+            <b style="color:var(--primary)">ESPECIALISTA EM MILHAS</b>
+            <p style="font-size:11px; margin:10px 0;">Siga @nomedoinstagram para dicas exclusivas e consultoria.</p>
+            <a href="https://instagram.com/nomedoinstagram" target="_blank" style="text-decoration: none;">
+                <button class="btn" style="padding:8px; font-size:10px; background:var(--primary); color:#000;">SEGUIR NO INSTAGRAM</button>
+            </a>
+        </div>
+
+        <div class="promo-card">
+            <b style="color:var(--secondary)">OFERTA LIVELO</b>
+            <p style="font-size:11px; margin:10px 0;">Compre hoje e ganhe 10x pontos em eletrônicos.</p>
+            <button class="btn" style="padding:8px; font-size:10px; background:var(--primary); color:#000;">VER LOJA</button>
+        </div>
+
+        <div class="promo-card" style="border-color: var(--accent);">
+            <b style="color:var(--accent)">SMILES DESTINOS</b>
+            <p style="font-size:11px; margin:10px 0;">Resgates nacionais a partir de 10k pontos.</p>
+            <button class="btn" style="padding:8px; font-size:10px; background:var(--secondary); color:#000;">RESERVAR</button>
+        </div>
+    </aside>
+</div>
+
+<script>
+let db = {};
+let chart;
+let cfg = { usd: 5.15, mil: 20.0, cdi: 0.1125 };
+
+function toggleTheme() {
+    const b = document.body;
+    b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    if(Object.keys(db).length > 0) calc();
+}
+
+function toggleSpendInput() {
+    const type = document.getElementById('spendType').value;
+    document.getElementById('singleSpendDiv').style.display = type === 'custom' ? 'none' : 'block';
+    document.getElementById('customSpendDiv').style.display = type === 'custom' ? 'block' : 'none';
+    document.getElementById('spendLabel').innerText = type === 'year' ? 'Gasto Anual (R$)' : 'Gasto Mensal (R$)';
+}
+
+async function syncRules() {
+    try {
+        const response = await fetch('regras.json');
+        const data = await response.json();
+        
+        db = data.bancos;
+        cfg.usd = data.config.usd_ptax;
+        cfg.mil = data.config.valor_milheiro;
+        cfg.cdi = data.config.cdi_anual;
+
+        alert(`✅ Sincronizado com sucesso!\nUSD: R$ ${cfg.usd} | Milheiro: R$ ${cfg.mil}`);
+        
+        const bankS = document.getElementById('bank');
+        bankS.innerHTML = "";
+        Object.keys(db).sort().forEach(b => bankS.add(new Option(b, b)));
+        
+        updBand();
+    } catch (e) {
+        console.error("Erro no Sync:", e);
+        alert("Erro ao ler regras.json. Certifique-se de rodar em um servidor local.");
+    }
+}
+
+function init() {
+    const monthsDiv = document.getElementById('monthsInputs');
+    const months = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    months.forEach((m, i) => {
+        monthsDiv.innerHTML += `<input type="number" id="m${i}" value="" placeholder="Gasto em ${m}" style="margin-bottom:5px;">`;
+    });
+    syncRules(); // Auto-sync ao iniciar
+}
+
+function updBand() {
+    const b = document.getElementById('bank').value;
+    const bandS = document.getElementById('band'); bandS.innerHTML = "";
+    if(db[b]) Object.keys(db[b]).forEach(bn => bandS.add(new Option(bn, bn)));
+    updVar();
+}
+
+function updVar() {
+    const b = document.getElementById('bank').value, bn = document.getElementById('band').value;
+    const varS = document.getElementById('variante'); varS.innerHTML = "";
+    if(db[b] && db[b][bn]) db[b][bn].forEach((v, i) => varS.add(new Option(v.n, i)));
+}
+
+function calc() {
+    if(!db || Object.keys(db).length === 0) { alert("Sincronize as regras primeiro!"); return; }
+
+    const b = document.getElementById('bank').value, 
+          bn = document.getElementById('band').value, 
+          vi = document.getElementById('variante').value;
+
+    if (!b || !bn || vi === "" || vi === null) {
+        alert("Por favor, selecione um banco, bandeira e cartão válidos.");
+        return;
+    }
+    const card = db[b]?.[bn]?.[vi];
+    if (!card) { return; }
+
+    const type = document.getElementById('spendType').value;
+    const bonus = 1 + parseFloat(document.getElementById('bonus').value);
+    const cdiF = parseFloat(document.getElementById('cdi').value);
+    const intlRatio = (parseFloat(document.getElementById('intlPercent').value) || 0) / 100;
+    const mCDI = Math.pow(1 + (cfg.cdi * cdiF), 1/12) - 1;
+    const isAnuidadeIsenta = document.getElementById('anuidadeIsenta').checked;
+    const anuidade = isAnuidadeIsenta ? 0 : (card.anuidade || 0);
+
+    let aCB = 0, aCDI = 0, aM = 0, totalPts = 0;
+    let dCB = [], dM = [];
+    let strategyHTML = "";
+    const months = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+
+    for(let i=0; i<12; i++) {
+        let s = (type === 'month') ? (parseFloat(document.getElementById('spendValue').value) || 0) : 
+                (type === 'year' ? (parseFloat(document.getElementById('spendValue').value)||0)/12 : 
+                (parseFloat(document.getElementById('m'+i).value)||0));
+
+        let mC = (card.c || 0) * s;
+        let pts = 0;
+
+        if (card.p) {
+            const p_unit = card.p_unit || 'dollar';
+            let points_rate = 0;
+
+            if (typeof card.p === 'object') {
+                const basePts = card.p.base || 0;
+                const intlPts = card.p.international || basePts;
+                points_rate = (basePts * (1 - intlRatio)) + (intlPts * intlRatio);
+            } else {
+                points_rate = card.p;
+            }
+            if (b === "Porto Bank" && card.n === "Infinite") {
+                if (s >= 20000) {
+                    points_rate = 3.5;
+                } else if (s >= 10000) {
+                    points_rate = 3.0;
+                }
+            }
+            if (b === "Banco do Brasil" && card.n === "Altus Infinite") {
+                if (s >= 25000) {
+                    points_rate = 4.0;
+                }
+            }
+
+            if (p_unit === 'dollar') {
+                pts = (s / cfg.usd) * points_rate;
+            } else if (p_unit === 'real') {
+                pts = s * points_rate;
+            }
+        }
+
+        totalPts += pts;
+        
+        let valMilhasMensal = (pts * bonus / 1000) * cfg.mil;
+        let valCashMensal = mC;
+
+        aCDI += (aCB + aCDI) * mCDI;
+        aCB += mC;
+        aM += valMilhasMensal;
+        
+        dCB.push(aCB + aCDI); 
+        dM.push(aM);
+        let melhorMes = 'N/A';
+        let corMes = 'var(--muted)';
+        let iconMes = '🤔';
+        let valorMes = 0;
+
+        if (valMilhasMensal > valCashMensal) {
+            melhorMes = card.reward_type === 'choice' ? 'Escolha Milhas' : 'Milhas';
+            corMes = 'var(--secondary)'; iconMes = '✈️'; valorMes = valMilhasMensal;
+        } else if (valCashMensal > 0) {
+            melhorMes = card.reward_type === 'choice' ? 'Escolha Cashback' : 'Cashback';
+            corMes = 'var(--primary)'; iconMes = '💵'; valorMes = valCashMensal;
+        }
+        
+        strategyHTML += `
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 10px; text-align: center;">
+                <div style="font-size: 10px; font-weight: 800; color: var(--muted);">${months[i]}</div>
+                <div style="font-size: 18px; margin: 5px 0;">${iconMes}</div>
+                <div style="font-size: 9px; font-weight: 800; color: ${corMes};">${melhorMes.toUpperCase()}</div>
+                <div style="font-size: 10px; margin-top: 4px;">R$ ${valorMes.toFixed(0)}</div>
+            </div>
+        `;
+    }
+
+    const netCashBenefit = aCB + aCDI - anuidade;
+    const netMilesBenefit = aM - anuidade;
+
+    document.getElementById('monthlyStrategyGrid').innerHTML = strategyHTML;
+    document.getElementById('vAnuidade').innerText = "- R$ " + anuidade.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    document.getElementById('vTotal').innerText = "R$ " + netCashBenefit.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    document.getElementById('vMil').innerText = "R$ " + netMilesBenefit.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    const vPtsEl = document.getElementById('vPts');
+    if (totalPts > 0) {
+        const pointsProgram = card.points_program || 'Pontos';
+        vPtsEl.innerText = `~ ${Math.floor(totalPts).toLocaleString('pt-BR')} ${pointsProgram}`;
+    } else {
+        vPtsEl.innerText = '';
+    }
+    
+    const ver = document.getElementById('veredito');
+    const cCash = document.getElementById('cardCash');
+    const cPoints = document.getElementById('cardPoints');
+    cCash.classList.remove('winner-glow'); cPoints.classList.remove('winner-glow');
+
+    if(netMilesBenefit > netCashBenefit) {
+        ver.innerText = "ESTRATÉGIA ANUAL: FOCO EM MILHAS ✈️";
+        ver.style.color = "var(--secondary)";
+        cPoints.classList.add('winner-glow');
+    } else {
+        ver.innerText = "ESTRATÉGIA ANUAL: FOCO EM CASHBACK 💵";
+        ver.style.color = "var(--primary)";
+        cCash.classList.add('winner-glow');
+    }
+
+    renderChart(dCB, dM);
+    radar(Math.max(netCashBenefit, netMilesBenefit), card, intlRatio);
+}
+
+function radar(currentBenefit, currentCard, intlRatio) {
+    const radarDiv = document.getElementById('radar');
+    const radarTxt = document.getElementById('radarTxt');
+    let bestCard = null;
+    let bestCardOwner = null;
+    let maxBenefit = currentBenefit;
+    const cdiF = parseFloat(document.getElementById('cdi').value);
+    const mCDI = Math.pow(1 + (cfg.cdi * cdiF), 1/12) - 1;
+
+    const spendType = document.getElementById('spendType').value;
+    let totalAnnualSpend = 0;
+    if (spendType === 'custom') {
+        for(let i=0; i<12; i++) {
+            totalAnnualSpend += parseFloat(document.getElementById('m'+i).value) || 0;
+        }
+    } else if (spendType === 'year') {
+        totalAnnualSpend = parseFloat(document.getElementById('spendValue').value) || 0;
+    } else { // month
+        totalAnnualSpend = (parseFloat(document.getElementById('spendValue').value) || 0) * 12;
+    }
+    const monthlySpendAvg = totalAnnualSpend / 12;
+
+    Object.keys(db).forEach(bankName => {
+        Object.values(db[bankName]).forEach(cartoes => {
+            cartoes.forEach(card => {
+                if (card.n === currentCard.n) return;
+
+                let points_rate = 0;
+                if (typeof card.p === 'object') {
+                    const basePts = card.p.base || 0;
+                    const intlPts = card.p.international || basePts;
+                    points_rate = (basePts * (1 - intlRatio)) + (intlPts * intlRatio);
+                } else {
+                    points_rate = card.p || 0;
+                }
+
+                if (bankName === "Porto Bank" && card.n === "Infinite") {
+                    if (monthlySpendAvg >= 20000) {
+                        points_rate = 3.5;
+                    } else if (monthlySpendAvg >= 10000) {
+                        points_rate = 3.0;
+                    }
+                }
+                if (bankName === "Banco do Brasil" && card.n === "Altus Infinite") {
+                    if (monthlySpendAvg >= 25000) {
+                        points_rate = 4.0;
+                    }
+                }
+
+                const p_unit = card.p_unit || 'dollar';
+                const otherAnuidade = card.anuidade || 0;
+                const pts = p_unit === 'real' ? totalAnnualSpend * points_rate : (totalAnnualSpend / cfg.usd) * points_rate;
+                const benefitMilhas = (pts / 1000) * cfg.mil;
+                
+                const monthlyCashback = monthlySpendAvg * (card.c || 0);
+                let radar_aCB = 0;
+                let radar_aCDI = 0;
+                for (let i=0; i<12; i++) {
+                    radar_aCDI += (radar_aCB + radar_aCDI) * mCDI;
+                    radar_aCB += monthlyCashback;
+                }
+                const benefitCashWithCDI = radar_aCB + radar_aCDI;
+
+                const cardBenefit = Math.max(benefitMilhas, benefitCashWithCDI) - otherAnuidade;
+
+                if (cardBenefit > maxBenefit) {
+                    maxBenefit = cardBenefit;
+                    bestCard = card;
+                    bestCardOwner = bankName;
+                }
+            });
+        });
+    });
+
+    if (bestCard) {
+        radarDiv.style.display = 'block';
+        radarTxt.innerText = `O cartão ${bestCard.n} (${bestCardOwner}) poderia render R$ ${maxBenefit.toFixed(2)}, um ganho de R$ ${(maxBenefit - currentBenefit).toFixed(2)}!`;
+    } else {
+        radarDiv.style.display = 'none';
+    }
+}
+
+function renderChart(cb, mil) {
+    const ctx = document.getElementById('chart').getContext('2d');
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    if(chart) chart.destroy();
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],
+            datasets: [
+                { label: 'Dinheiro', data: cb, borderColor: '#00F5A0', backgroundColor: 'rgba(0, 245, 160, 0.1)', fill: true, tension: 0.4 },
+                { label: 'Milhas', data: mil, borderColor: '#00D9FF', borderDash: [5, 5], tension: 0.4 }
+            ]
+        },
+        options: {
+            plugins: { legend: { labels: { color: isDark ? '#fff' : '#000' } } },
+            scales: {
+                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748B' } },
+                x: { ticks: { color: '#64748B' } }
+            }
+        }
+    });
+}
+
+function exportPDF() {
+    if (!chart) {
+        alert("Por favor, realize um cálculo antes de exportar o PDF.");
+        return;
+    }
+
+    const bank = document.getElementById('bank').value;
+    const band = document.getElementById('band').value;
+    const varianteEl = document.getElementById('variante');
+    const cardName = varianteEl.options[varianteEl.selectedIndex].text;
+
+    const card = db[bank]?.[band]?.[varianteEl.value];
+    if (!card) {
+        alert("Dados do cartão não encontrados. Por favor, selecione novamente e calcule antes de exportar.");
+        return;
+    }
+
+    const spendType = document.getElementById('spendType').value;
+    const spendValue = document.getElementById('spendValue').value;
+    const intlPercent = document.getElementById('intlPercent').value;
+    const bonus = document.getElementById('bonus').options[document.getElementById('bonus').selectedIndex].text;
+    const anuidadeOriginal = (card.anuidade || 0);
+    const isAnuidadeIsenta = document.getElementById('anuidadeIsenta').checked;
+    const anuidadeStatus = isAnuidadeIsenta ? `R$ ${anuidadeOriginal.toLocaleString('pt-BR', {minimumFractionDigits: 2})} (Isenta)` : `R$ ${anuidadeOriginal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    
+    let spendDescription = '';
+    if (spendType === 'month') {
+        spendDescription = `Gasto Fixo Mensal de R$ ${parseFloat(spendValue).toLocaleString('pt-BR')}`;
+    } else if (spendType === 'year') {
+        spendDescription = `Gasto Total Anual de R$ ${parseFloat(spendValue).toLocaleString('pt-BR')}`;
+    } else {
+        spendDescription = 'Gasto Detalhado por Mês';
+    }
+    const totalCash = document.getElementById('vTotal').innerText;
+    const totalMilhas = document.getElementById('vMil').innerText;
+    const totalPontos = document.getElementById('vPts').innerText;
+    const veredito = document.getElementById('veredito').innerText;
+    const radarDiv = document.getElementById('radar');
+    const radarVisible = radarDiv.style.display === 'block';
+    const radarText = radarVisible ? document.getElementById('radarTxt').innerText : '';
+    const chartImage = chart.toBase64Image();
+
+    const primaryColor = '#059669';
+    const secondaryColor = '#0284C7';
+    const textColor = '#1E293B';
+    const mutedColor = '#64748B';
+    const borderColor = '#E2E8F0';
+
+    const exportContainer = document.createElement('div');
+
+    let monthlyStrategyPDF_HTML = '<table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 10px;"><tbody>';
+    const months = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    
+    for (let r = 0; r < 2; r++) {
+        monthlyStrategyPDF_HTML += '<tr>';
+        for (let c = 0; c < 6; c++) {
+            const i = r * 6 + c;
+            let s = (spendType === 'month') ? (parseFloat(spendValue) || 0) : 
+                    (spendType === 'year' ? (parseFloat(spendValue)||0)/12 : 
+                    (parseFloat(document.getElementById('m'+i).value)||0));
+
+            let mC = (card.c || 0) * s;
+            let pts = 0;
+            if (card.p) {
+                const p_unit = card.p_unit || 'dollar';
+                let points_rate = 0;
+                if (typeof card.p === 'object') {
+                    points_rate = (card.p.base || 0) * (1 - (parseFloat(intlPercent) / 100)) + (card.p.international || card.p.base || 0) * (parseFloat(intlPercent) / 100);
+                } else {
+                    points_rate = card.p;
+                }
+                if (bank === "Porto Bank" && card.n === "Infinite") { if (s >= 20000) points_rate = 3.5; else if (s >= 10000) points_rate = 3.0; }
+                if (bank === "Banco do Brasil" && card.n === "Altus Infinite") { if (s >= 25000) points_rate = 4.0; }
+                if (p_unit === 'dollar') pts = (s / cfg.usd) * points_rate; else if (p_unit === 'real') pts = s * points_rate;
+            }
+            let valMilhasMensal = (pts * (1 + parseFloat(document.getElementById('bonus').value)) / 1000) * cfg.mil;
+            let valCashMensal = mC;
+
+            let melhorMes = 'N/A', corMes = mutedColor, iconMes = '🤔', valorMes = 0;
+            if (valMilhasMensal > valCashMensal) {
+                melhorMes = card.reward_type === 'choice' ? 'Escolha Milhas' : 'Milhas';
+                corMes = secondaryColor; iconMes = '✈️'; valorMes = valMilhasMensal;
+            } else if (valCashMensal > 0) {
+                melhorMes = card.reward_type === 'choice' ? 'Escolha Cashback' : 'Cashback';
+                corMes = primaryColor; iconMes = '💵'; valorMes = valCashMensal;
+            }
+
+            monthlyStrategyPDF_HTML += `
+                <td style="border: 1px solid ${borderColor}; padding: 5px; width: 16.66%;">
+                    <div style="font-weight: bold; color: ${mutedColor};">${months[i]}</div>
+                    <div style="font-size: 16px; margin: 2px 0;">${iconMes}</div>
+                    <div style="font-size: 9px; font-weight: bold; color: ${corMes};">${melhorMes.toUpperCase()}</div>
+                    <div style="font-size: 10px;">R$ ${valorMes.toFixed(0)}</div>
+                </td>`;
+        }
+        monthlyStrategyPDF_HTML += '</tr>';
+    }
+    monthlyStrategyPDF_HTML += '</tbody></table>';
+
+    exportContainer.innerHTML = `
+    <div style="font-family: Arial, sans-serif; color: ${textColor}; line-height: 1.4;">
+        
+        <div style="text-align: center; border-bottom: 2px solid ${borderColor}; padding-bottom: 10px; margin-bottom: 20px;">
+            <h1 style="color: ${primaryColor}; margin: 0; font-size: 24px;">Relatório de Análise</h1>
+            <h2 style="color: ${textColor}; margin: 5px 0 0 0; font-weight: normal; font-size: 18px;">Cash ou Milhas</h2>
+        </div>
+        
+        <h3 style="margin-top: 15px; color: ${textColor}; border-bottom: 1px solid ${borderColor}; padding-bottom: 3px; font-size: 16px;">Parâmetros da Simulação</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px;">
+            <tr style="border-bottom: 1px solid ${borderColor};"><td style="padding: 6px; font-weight: bold;">Cartão:</td><td style="padding: 6px;">${cardName} (${bank})</td></tr>
+            <tr style="border-bottom: 1px solid ${borderColor};"><td style="padding: 6px; font-weight: bold;">Anuidade:</td><td style="padding: 6px;">${anuidadeStatus}</td></tr>
+            <tr style="border-bottom: 1px solid ${borderColor};"><td style="padding: 6px; font-weight: bold;">Gastos:</td><td style="padding: 6px;">${spendDescription}</td></tr>
+            <tr style="border-bottom: 1px solid ${borderColor};"><td style="padding: 6px; font-weight: bold;">Bônus:</td><td style="padding: 6px;">${bonus}</td></tr>
+        </table>
+
+        <h3 style="margin-top: 20px; color: ${textColor}; border-bottom: 1px solid ${borderColor}; padding-bottom: 3px; font-size: 16px;">Resultado Líquido Anual</h3>
+        <table style="width: 100%; border-collapse: collapse; text-align: center; margin: 15px 0;">
+            <thead>
+                <tr>
+                    <th style="padding: 5px; font-size: 12px; color: ${mutedColor}; border-bottom: 2px solid ${borderColor};">Dinheiro (Cash + CDI)</th>
+                    <th style="padding: 5px; font-size: 12px; color: ${mutedColor}; border-bottom: 2px solid ${borderColor};">Pontos / Milhas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 10px; font-size: 22px; font-weight: bold; color: ${primaryColor};">${totalCash}</td>
+                    <td style="padding: 10px; font-size: 22px; font-weight: bold; color: ${secondaryColor};">
+                        ${totalMilhas}
+                        <div style="font-size: 11px; color: ${mutedColor}; font-weight: normal;">${totalPontos}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="text-align: center; font-size: 16px; font-weight: bold; padding: 12px; border-radius: 8px; background: ${borderColor}; color: ${textColor};">${veredito}</div>
+
+        ${radarVisible ? `
+            <h3 style="margin-top: 20px; color: ${textColor}; border-bottom: 1px solid ${borderColor}; padding-bottom: 3px; font-size: 16px;">Radar de Upgrade</h3>
+            <div style="background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 13px;">
+                🚀 ${radarText}
+            </div>
+        ` : ''}
+
+        <h3 style="margin-top: 20px; color: ${textColor}; border-bottom: 1px solid ${borderColor}; padding-bottom: 3px; font-size: 16px;">Análise Estratégia Mensal</h3>
+        <div style="margin-top: 10px;">
+            ${monthlyStrategyPDF_HTML} 
+        </div>
+
+        <h3 style="margin-top: 20px; color: ${textColor}; border-bottom: 1px solid ${borderColor}; padding-bottom: 3px; font-size: 16px;">Gráfico de Evolução</h3>
+        <div style="text-align: center; margin-top: 10px;">
+             <img src="${chartImage}" style="width: 100%; max-height: 250px; object-fit: contain;">
+        </div>
+        
+        <p style="text-align: center; font-size: 9px; color: ${mutedColor}; margin-top: 20px;">Relatório gerado em ${new Date().toLocaleDateString('pt-BR')}</p>
+    </div>
+`;
+
+const opt = {
+    margin: 15,
+    filename: `Analise_Cash_ou_Milhas_${cardName.replace(/ /g, '_')}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+        scale: 2, 
+        useCORS: true,
+        letterRendering: true 
+    },
+    jsPDF: { unit: 'mm', format: [210, 420], orientation: 'portrait' }
+};
+
+html2pdf().from(exportContainer).set(opt).save();
+}
+
+window.onload = init;
+</script>
+</body>
+</html>

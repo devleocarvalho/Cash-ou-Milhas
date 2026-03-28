@@ -1,0 +1,121 @@
+{
+  "config": {
+    "usd_ptax": 5.54,
+    "valor_milheiro": 25.00,
+    "cdi_anual": 0.1451,
+    "atualizado_em": "2026-03-21"
+  },
+  "bancos": {
+    "Banco do Brasil": {
+      "Visa": [
+        {"n": "Gold", "anuidade": 420, "c": 0, "p": 1.0, "p_unit": "dollar", "points_program": "Livelo", "obs": "1.0 pt/$. Isenção com R$ 4k/mês ou investimentos."},
+        {"n": "Platinum", "anuidade": 636, "c": 0, "p": 1.5, "p_unit": "dollar", "points_program": "Livelo", "obs": "1.5 pts/$. Isenção com R$ 7k/mês ou R$ 150k investidos."},
+        {"n": "Infinite", "anuidade": 1260, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.0 pts/$. Isenção com gastos acima de R$ 15k/mês ou R$ 250k investidos."},
+        {"n": "Altus Infinite", "anuidade": 1500, "c": 0, "p": 2.5, "p_unit": "dollar", "points_program": "Livelo", "obs": "Base 2.5 pts/$. Segmento Private ou R$ 25k/mês para 4.0 pts/$. Máximo luxo do BB."}
+      ],
+      "Mastercard": [
+        {"n": "Black", "anuidade": 1320, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.0 pts/$. Isenção com R$ 15k/mês. 80% de desconto na anuidade para quem já tem Visa Infinite ativo."}
+      ],
+      "Elo": [
+        {"n": "Grafite", "anuidade": 612, "c": 0, "p": 1.7, "p_unit": "dollar", "points_program": "Livelo", "obs": "1.7 pts/$. Isenção com R$ 8k/mês."},
+        {"n": "Nanquim", "anuidade": 1320, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.2 pts/$. Isenção com R$ 15k/mês. Promoção 90% desconto p/ quem tem Visa Infinite."}
+      ]
+    },
+    "Bradesco": {
+      "Visa": [
+        {"n": "Signature", "anuidade": 690, "c": 0, "p": 1.0, "p_unit": "dollar", "points_program": "Livelo", "obs": "1.0 pt/$. Campanha 'Anuidade Grátis p/ Sempre' até 31/03/26 p/ novos cartões c/ gastos mínimos."},
+        {"n": "Infinite", "anuidade": 1260, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.0 pts/$. Salas VIP ilimitadas. Isenção com R$ 10k/mês."},
+        {"n": "Aeternum", "anuidade": 1848, "c": 0, "p": 4.0, "p_unit": "dollar", "points_program": "Livelo", "obs": "4.0 pts/$. Cartão de metal. Private Bank. Isenção difícil, geralmente por investimentos > R$ 5M."}
+      ],
+      "Amex": [
+        {"n": "Gold Card", "anuidade": 750, "c": 0, "p": 1.5, "p_unit": "dollar", "points_program": "Membership Rewards", "obs": "1.5 pts/$. Sem limite preestabelecido."},
+        {"n": "The Platinum", "anuidade": 1800, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Membership Rewards", "obs": "2.2 pts/$. Pontos nunca expiram. Acessos Centurion Lounge ilimitados."},
+        {"n": "Centurion", "anuidade": 12000, "c": 0, "p": 5.0, "p_unit": "dollar", "points_program": "Membership Rewards", "obs": "5.0 pts/$. Apenas convite. Concierge dedicado 24h."}
+      ],
+      "Elo": [
+        {"n": "Grafite", "anuidade": 690, "c": 0, "p": 1.4, "p_unit": "dollar", "points_program": "Livelo", "obs": "1.4 pts/$."},
+        {"n": "Nanquim", "anuidade": 1350, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.2 pts/$."},
+        {"n": "Diners Club", "anuidade": 1500, "c": 0, "p": {"base": 2.2, "international": 3.3}, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.2 nacional / 3.3 inter. Transfer (Limo) p/ aeroporto incluso."}
+      ]
+    },
+    "Itaú": {
+      "Visa": [
+        {"n": "Signature", "anuidade": 696, "c": 0, "p": 1.5, "p_unit": "dollar", "points_program": "Itaú", "obs": "1.5 pts/$. Isento via Minhas Vantagens Nível 2."},
+        {"n": "Azul Infinite", "anuidade": 1200, "c": 0, "p": {"base": 3.0, "international": 3.5}, "p_unit": "dollar", "points_program": "Azul", "obs": "3.0 nac / 3.5 inter. Promoção Março/26: 80k pts bônus p/ novos clientes. Isento com R$ 20k/mês."},
+        {"n": "GOL Smiles Infinite", "anuidade": 1356, "c": 0, "p": 3.0, "p_unit": "dollar", "points_program": "Smiles", "obs": "3.0 pts/$ Clube Smiles. Isento com R$ 20k/mês."}
+      ],
+      "Mastercard": [
+        {"n": "Black", "anuidade": 840, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Itaú", "obs": "2.0 pts/$. Isenção com R$ 10k/mês."},
+        {"n": "Personnalité Black", "anuidade": 1200, "c": 0, "p": {"base": 2.0, "international": 3.0}, "p_unit": "dollar", "points_program": "Itaú", "obs": "2.0 nac / 3.0 inter. Isento com R$ 50k investidos ou Nível 2 Minhas Vantagens."},
+        {"n": "LATAM Black", "anuidade": 1200, "c": 0, "p": 2.5, "p_unit": "dollar", "points_program": "LATAM Pass", "obs": "2.5 pts/$. Pontos direto na LATAM. Isento com R$ 20k/mês."},
+        {"n": "The One", "anuidade": 4000, "c": 0, "p": {"base": 3.5, "international": 4.0}, "p_unit": "dollar", "points_program": "Itaú", "obs": "3.5 nac / 4.0 inter. Acesso ilimitado VIP Dragon Pass."}
+      ]
+    },
+    "Santander": {
+      "Mastercard": [
+        {"n": "Black Unique", "anuidade": 1188, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Esfera", "obs": "2.0 nac / 3.0 inter. Isento com R$ 30k/mês ou R$ 150k investidos."},
+        {"n": "Unlimited", "anuidade": 2200, "c": 0, "p": 2.6, "p_unit": "dollar", "points_program": "Esfera", "obs": "2.6 pts/$. Milhas em dobro pagando +4% da fatura. Isento com R$ 30k/mês."}
+      ],
+      "Visa": [
+        {"n": "Infinite Unique", "anuidade": 1188, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Esfera", "obs": "2.0 nac / 3.0 inter. Isento com R$ 30k/mês."},
+        {"n": "GOL Smiles Infinite", "anuidade": 1356, "c": 0, "p": 3.0, "p_unit": "dollar", "points_program": "Smiles", "obs": "3.0 pts/$ Clube Smiles."}
+      ],
+      "Amex": [
+        {"n": "The Platinum", "anuidade": 1560, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Membership Rewards", "obs": "2.2 pts/$. Acúmulo no Membership Rewards (não Esfera)."}
+      ]
+    },
+    "CAIXA": {
+      "Visa": [
+        {"n": "Infinite", "anuidade": 1100, "c": 0, "p": 2.3, "p_unit": "dollar", "points_program": "CAIXA", "obs": "2.3 pts/$. Promoção Março/26: Isenção anuidade vitalícia p/ novos gastos acima de R$ 10k."},
+        {"n": "Dux Infinite", "anuidade": 1500, "c": 0, "p": {"base": 5.0, "international": 7.0}, "p_unit": "dollar", "points_program": "CAIXA", "obs": "5.0 nac / 7.0 inter. Melhor pontuação do país. Isento com R$ 50k/mês."}
+      ],
+      "Elo": [
+        {"n": "Nanquim", "anuidade": 900, "c": 0, "p": 2.3, "p_unit": "dollar", "points_program": "CAIXA", "obs": "2.3 pts/$. 2 acessos VIP LoungeKey."}
+      ]
+    },
+    "Nubank": {
+      "Mastercard": [
+        {"n": "Gold/Platinum", "anuidade": 0, "c": 0, "p": 0, "obs": "Sem acúmulo."},
+        {"n": "Ultravioleta", "anuidade": 1068, "reward_type": "choice", "c": 0.0125, "p": 2.2, "p_unit": "dollar", "points_program": "Nubank", "obs": "Novo: 2.2 pts/$ ou 1.25% cashback (200% CDI). Isento com R$ 5k/mês ou R$ 50k investidos. IOF zero inter."}
+      ]
+    },
+    "C6 Bank": {
+      "Mastercard": [
+        {"n": "Black", "anuidade": 720, "c": 0.012, "p": 2.5, "p_unit": "dollar", "points_program": "Átomos", "obs": "Até 2.5 pts/$ ou 1.2% cashback. Isento com R$ 3k/mês."},
+        {"n": "Carbon Black", "anuidade": 1176, "c": 0, "p": 3.5, "p_unit": "dollar", "points_program": "Átomos", "obs": "Upgrade Março/26: até 3.5 pts/$. Isento com R$ 8k/mês ou R$ 50k CDB C6."},
+        {"n": "Graphene", "anuidade": 800, "c": 0, "p": 2.5, "p_unit": "dollar", "points_program": "Átomos", "obs": "Focado em PJ. Acessos ilimitados VIP."}
+      ]
+    },
+    "Inter": {
+      "Mastercard": [
+        {"n": "Gold", "anuidade": 0, "c": 0.0025, "p": 0, "obs": "0.25% Cashback."},
+        {"n": "Platinum", "anuidade": 0, "c": 0.005, "p": 0, "obs": "0.5% Cashback."},
+        {"n": "Black", "anuidade": 0, "c": 0.01, "p": 0, "obs": "1% Cashback. Isento com Duo Gourmet ou R$ 7k/mês."},
+        {"n": "Win", "anuidade": 0, "c": 0.0125, "p": 0, "obs": "1.25% Cashback. Exclusivo p/ R$ 1M investido."}
+      ]
+    },
+    "XP Investimentos": {
+      "Visa": [
+        {"n": "One", "anuidade": 0, "reward_type": "choice", "c": 0.011, "p": 1.8, "p_unit": "dollar", "points_program": "XP", "obs": "Investimentos entre R$ 5k e R$ 50k. 1.1% Investback ou 1.8 pts/$."},
+        {"n": "Infinite", "anuidade": 0, "reward_type": "choice", "c": 0.015, "p": 3.0, "p_unit": "dollar", "points_program": "XP", "obs": "Investimentos > R$ 50k. 1.5% Investback ou 3.0 pts/$. 4 acessos VIP."}
+      ]
+    },
+    "BTG Pactual": {
+      "Mastercard": [
+        {"n": "Advanced", "anuidade": 360, "reward_type": "choice", "c": 0.0075, "p": 1.6, "p_unit": "dollar", "points_program": "BTG", "obs": "Escolha cashback ou pontos. Isento com R$ 30k investidos."},
+        {"n": "Black", "anuidade": 1200, "reward_type": "choice", "c": 0.01, "p": 2.2, "p_unit": "dollar", "points_program": "BTG", "obs": "Isento com R$ 12k/mês ou R$ 100k investidos."},
+        {"n": "Black (Diamante)", "anuidade": 1200, "reward_type": "choice", "c": 0.01, "p": 2.75, "p_unit": "dollar", "points_program": "BTG", "obs": "Benefício Missão BTG. 2.75 pts/$ ou 1% cashback."}
+      ]
+    },
+    "Porto Bank": {
+      "Visa": [
+        {"n": "Infinite", "anuidade": 1560, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Porto Plus", "obs": "Até 3.5 pts/$ para gastos > R$ 20k. Isento com R$ 20k/mês."}
+      ]
+    },
+    "Unicred": {
+      "Visa": [
+        {"n": "Infinite", "anuidade": 900, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Unicred", "obs": "2.2 pts/$. Salas VIP ilimitadas p/ titular + acompanhante."}
+      ]
+    }
+  }
+}

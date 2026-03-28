@@ -1,0 +1,5 @@
+# Ignorar arquivos de configuração local ou sensíveis que não devem ir para o repositório
+config.local.json
+
+# Arquivos de sistema operacional
+.DS_Store
