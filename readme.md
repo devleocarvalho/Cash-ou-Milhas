@@ -5,7 +5,7 @@ Este projeto é uma ferramenta para comparar os benefícios de cartões de créd
 O arquivo principal é o `regras.json`, que contém uma base de dados com informações sobre diversos cartões, incluindo:
 
 - Anuidade
-- Pontuação por dólar ou real
+- Pontuação por dólar ou real,
 - Programas de pontos (Livelo, Esfera, etc.)
 - Regras de isenção de anuidade
 - Observações e benefícios específicos
