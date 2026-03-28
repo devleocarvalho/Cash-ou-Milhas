@@ -24,4 +24,3 @@ Se você encontrar alguma informação desatualizada ou quiser adicionar um novo
 4.  Faça o "Commit" de suas alterações (`git commit -m 'Add: Novo Cartao X'`).
 5.  Faça o "Push" para a "Branch" (`git push origin feature/NovoCartao`).
 6.  Abra um "Pull Request".
-    }
