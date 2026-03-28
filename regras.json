@@ -34,7 +34,7 @@
       ],
       "Amex": [
         {"n": "Gold Card", "anuidade": 750, "c": 0, "p": 1.5, "p_unit": "dollar", "points_program": "Membership Rewards", "obs": "1.5 pts/$. Sem limite preestabelecido."},
-        {"n": "The Platinum", "anuidade": 1800, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Membership Rewards", "obs": "2.2 pts/$. Pontos nunca expiram. Acessos Centurion Lounge ilimitados."},
+        {"n": "The Platinum", "anuidade": 1800, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Membership Rewards", "points_expire": false, "obs": "Acessos Centurion Lounge ilimitados."},
         {"n": "Centurion", "anuidade": 12000, "c": 0, "p": 5.0, "p_unit": "dollar", "points_program": "Membership Rewards", "obs": "5.0 pts/$. Apenas convite. Concierge dedicado 24h."}
       ],
       "Elo": [
@@ -46,7 +46,10 @@
     "Itaú": {
       "Visa": [
         {"n": "Signature", "anuidade": 696, "c": 0, "p": 1.5, "p_unit": "dollar", "points_program": "Itaú", "obs": "1.5 pts/$. Isento via Minhas Vantagens Nível 2."},
-        {"n": "Azul Infinite", "anuidade": 1200, "c": 0, "p": {"base": 3.0, "international": 3.5}, "p_unit": "dollar", "points_program": "Azul", "obs": "3.0 nac / 3.5 inter. Promoção Março/26: 80k pts bônus p/ novos clientes. Isento com R$ 20k/mês."},
+        {"n": "Azul Infinite", "anuidade": 1200, "c": 0, "p": {"base": 3.0, "international": 3.5}, "p_unit": "dollar", "points_program": "Azul", "signup_bonus": {
+          "points": 80000,
+          "condition": "Promoção de Março/26 para novos clientes"
+        }, "obs": "3.0 nac / 3.5 inter. Isento com R$ 20k/mês."},
         {"n": "GOL Smiles Infinite", "anuidade": 1356, "c": 0, "p": 3.0, "p_unit": "dollar", "points_program": "Smiles", "obs": "3.0 pts/$ Clube Smiles. Isento com R$ 20k/mês."}
       ],
       "Mastercard": [
