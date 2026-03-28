@@ -11,7 +11,12 @@
         {"n": "Gold", "anuidade": 420, "c": 0, "p": 1.0, "p_unit": "dollar", "points_program": "Livelo", "obs": "1.0 pt/$. Isenção com R$ 4k/mês ou investimentos."},
         {"n": "Platinum", "anuidade": 636, "c": 0, "p": 1.5, "p_unit": "dollar", "points_program": "Livelo", "obs": "1.5 pts/$. Isenção com R$ 7k/mês ou R$ 150k investidos."},
         {"n": "Infinite", "anuidade": 1260, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.0 pts/$. Isenção com gastos acima de R$ 15k/mês ou R$ 250k investidos."},
-        {"n": "Altus Infinite", "anuidade": 1500, "c": 0, "p": 2.5, "p_unit": "dollar", "points_program": "Livelo", "obs": "Base 2.5 pts/$. Segmento Private ou R$ 25k/mês para 4.0 pts/$. Máximo luxo do BB."}
+        {"n": "Altus Infinite", "anuidade": 1500, "c": 0, "p": {
+          "base": 2.5,
+          "tiers": [
+            {"points": 4.0, "condition_text": "Clientes do segmento Private ou com gastos mensais acima de R$25k"}
+          ]
+        }, "p_unit": "dollar", "points_program": "Livelo", "obs": "Pontuação base de 2.5 pts/$. Atinge 4.0 pts/$ para clientes Private ou com gastos >R$25k/mês. Máximo luxo do BB."}
       ],
       "Mastercard": [
         {"n": "Black", "anuidade": 1320, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Livelo", "obs": "2.0 pts/$. Isenção com R$ 15k/mês. 80% de desconto na anuidade para quem já tem Visa Infinite ativo."}
@@ -53,11 +58,11 @@
     },
     "Santander": {
       "Mastercard": [
-        {"n": "Black Unique", "anuidade": 1188, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Esfera", "obs": "2.0 nac / 3.0 inter. Isento com R$ 30k/mês ou R$ 150k investidos."},
+        {"n": "Black Unique", "anuidade": 1188, "c": 0, "p": {"base": 2.0, "international": 3.0}, "p_unit": "dollar", "points_program": "Esfera", "obs": "Isento com R$ 30k/mês ou R$ 150k investidos."},
         {"n": "Unlimited", "anuidade": 2200, "c": 0, "p": 2.6, "p_unit": "dollar", "points_program": "Esfera", "obs": "2.6 pts/$. Milhas em dobro pagando +4% da fatura. Isento com R$ 30k/mês."}
       ],
       "Visa": [
-        {"n": "Infinite Unique", "anuidade": 1188, "c": 0, "p": 2.0, "p_unit": "dollar", "points_program": "Esfera", "obs": "2.0 nac / 3.0 inter. Isento com R$ 30k/mês."},
+        {"n": "Infinite Unique", "anuidade": 1188, "c": 0, "p": {"base": 2.0, "international": 3.0}, "p_unit": "dollar", "points_program": "Esfera", "obs": "Isento com R$ 30k/mês."},
         {"n": "GOL Smiles Infinite", "anuidade": 1356, "c": 0, "p": 3.0, "p_unit": "dollar", "points_program": "Smiles", "obs": "3.0 pts/$ Clube Smiles."}
       ],
       "Amex": [
@@ -81,7 +86,7 @@
     },
     "C6 Bank": {
       "Mastercard": [
-        {"n": "Black", "anuidade": 720, "c": 0.012, "p": 2.5, "p_unit": "dollar", "points_program": "Átomos", "obs": "Até 2.5 pts/$ ou 1.2% cashback. Isento com R$ 3k/mês."},
+        {"n": "Black", "anuidade": 720, "reward_type": "choice", "c": 0.012, "p": 2.5, "p_unit": "dollar", "points_program": "Átomos", "obs": "Escolha entre até 2.5 pts/$ ou 1.2% cashback. Isento com R$ 3k/mês."},
         {"n": "Carbon Black", "anuidade": 1176, "c": 0, "p": 3.5, "p_unit": "dollar", "points_program": "Átomos", "obs": "Upgrade Março/26: até 3.5 pts/$. Isento com R$ 8k/mês ou R$ 50k CDB C6."},
         {"n": "Graphene", "anuidade": 800, "c": 0, "p": 2.5, "p_unit": "dollar", "points_program": "Átomos", "obs": "Focado em PJ. Acessos ilimitados VIP."}
       ]
@@ -109,7 +114,12 @@
     },
     "Porto Bank": {
       "Visa": [
-        {"n": "Infinite", "anuidade": 1560, "c": 0, "p": 2.2, "p_unit": "dollar", "points_program": "Porto Plus", "obs": "Até 3.5 pts/$ para gastos > R$ 20k. Isento com R$ 20k/mês."}
+        {"n": "Infinite", "anuidade": 1560, "c": 0, "p": {
+          "base": 2.2,
+          "tiers": [
+            {"spend_gt": 20000, "points": 3.5}
+          ]
+        }, "p_unit": "dollar", "points_program": "Porto Plus", "obs": "Pontuação base de 2.2 pts/$. Atinge 3.5 pts/$ com gastos acima de R$20k. Isento com R$ 20k/mês."}
       ]
     },
     "Unicred": {
